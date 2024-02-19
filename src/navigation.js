@@ -33,6 +33,7 @@ import DynamicScreen from "./screens/DynamicScreen";
 import { productsSlice } from "./store/productsSlice";
 import { masterProductsSlice } from "./store/masterProductsSlice";
 import axios from "axios";
+import { useEffect } from "react";
 
 const makeApiCall = async (url) => {
   try {
@@ -65,14 +66,16 @@ const Navigation = () => {
   const MASTER_DATA_API_URL =
     "https://mocki.io/v1/60b8db9f-a399-45ca-abc8-21dc9c1aecec";
 
-  const masterData = makeApiCall(MASTER_DATA_API_URL);
-  const productsData = makeApiCall(PRODUCTS_API_URL);
-  masterData.then((data) => {
-    dispatch(masterProductsSlice.actions.setMasterData(data));
-  });
-  productsData.then((data) => {
-    dispatch(productsSlice.actions.setProductsState(data));
-  });
+  useEffect(() => {
+    const masterData = makeApiCall(MASTER_DATA_API_URL);
+    const productsData = makeApiCall(PRODUCTS_API_URL);
+    masterData.then((data) => {
+      dispatch(masterProductsSlice.actions.setMasterData(data));
+    });
+    productsData.then((data) => {
+      dispatch(productsSlice.actions.setProductsState(data));
+    });
+  }, []);
 
   const headerIcons = ({ navigation }) => ({
     //moved from options of Stack.Screen
