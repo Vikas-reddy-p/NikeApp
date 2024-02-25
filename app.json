@@ -4,12 +4,13 @@
     "slug": "NikeApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/nikeapplogo.jpg",
+    "icon": "./assets/nikeapp_logo.png",
     "userInterfaceStyle": "light",
+    //"jsEngine": "hermes",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splashimage.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#111111"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
