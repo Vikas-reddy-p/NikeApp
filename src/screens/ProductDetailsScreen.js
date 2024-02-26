@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import Dropdown from "../components/Dropdown";
 import { FontAwesome } from "@expo/vector-icons";
 import * as Location from "expo-location";
+import { masterProductsSlice } from "../store/masterProductsSlice";
 
 const ProductDetailsScreen = ({ navigation }) => {
   const { width } = useWindowDimensions(); // to get the screen dimensions
@@ -41,24 +42,27 @@ const ProductDetailsScreen = ({ navigation }) => {
   ///////////////////
   //const [location, setLocation] = useState(null);
   const [address, setAddress] = useState(null);
-  const [deliveryLocation, setDeliveryLocation] = useState(null);
-  useEffect(() => {
-    (async () => {
-      try {
-        let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== "granted") {
-          console.warn("Permission to access location was denied");
-          return;
-        }
+  //const [deliveryLocation, setDeliveryLocation] = useState(null);
+  const deliveryLocation = useSelector(
+    (state) => state.masterProducts.deliveryLocation
+  );
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       let { status } = await Location.requestForegroundPermissionsAsync();
+  //       if (status !== "granted") {
+  //         console.warn("Permission to access location was denied");
+  //         return;
+  //       }
 
-        let currlocation = await Location.getCurrentPositionAsync({});
-        //setLocation(currlocation);
-        reverseGeoCode(currlocation.coords);
-      } catch (err) {
-        console.log(err);
-      }
-    })();
-  }, []);
+  //       let currlocation = await Location.getCurrentPositionAsync({});
+  //       //setLocation(currlocation);
+  //       reverseGeoCode(currlocation.coords);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   })();
+  // }, []);
 
   const geocode = async () => {
     try {
@@ -76,7 +80,12 @@ const ProductDetailsScreen = ({ navigation }) => {
           longitude: address.longitude,
           latitude: address.latitude,
         });
-        setDeliveryLocation(reverseGeoCodedAddress[0]);
+        //setDeliveryLocation(reverseGeoCodedAddress[0]);
+        dispatch(
+          masterProductsSlice.actions.setDeliveryLocation(
+            reverseGeoCodedAddress[0]
+          )
+        );
       }
     } catch (err) {
       console.log(err);

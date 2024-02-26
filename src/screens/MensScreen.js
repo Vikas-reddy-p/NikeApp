@@ -10,15 +10,52 @@ import {
   Pressable,
 } from "react-native";
 //import data from "../data/masterdata";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Categorieslist from "../components/CategoriesList";
 import { useDispatch, useSelector } from "react-redux";
 import { masterProductsSlice } from "../store/masterProductsSlice";
+import * as Location from "expo-location";
 
 const MensScreen = ({ navigation }) => {
   const data = useSelector((state) => state.masterProducts.allProducts);
   const scrollViewRef = useRef(null);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          console.warn("Permission to access location was denied");
+          return;
+        }
+
+        let currlocation = await Location.getCurrentPositionAsync({});
+        //setLocation(currlocation);
+        reverseGeoCode(currlocation.coords);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, []);
+  const reverseGeoCode = async (address) => {
+    try {
+      if (address) {
+        const reverseGeoCodedAddress = await Location.reverseGeocodeAsync({
+          longitude: address.longitude,
+          latitude: address.latitude,
+        });
+        //setDeliveryLocation(reverseGeoCodedAddress[0]);
+        dispatch(
+          masterProductsSlice.actions.setDeliveryLocation(
+            reverseGeoCodedAddress[0]
+          )
+        );
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const scrollTo = (viewRef) => {
     viewRef.measure((x, y, width, height, pageX, pageY) => {

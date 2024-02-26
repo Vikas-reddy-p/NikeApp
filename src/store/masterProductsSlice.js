@@ -3,6 +3,7 @@ import masterdata from "../data/masterdata";
 
 const initialState = {
   allProducts: masterdata,
+  deliveryLocation: null,
   selectedCategoryData: {},
 };
 
@@ -12,6 +13,9 @@ export const masterProductsSlice = createSlice({
   reducers: {
     setMasterData: (state, action) => {
       state.allProducts = action.payload;
+    },
+    setDeliveryLocation: (state, action) => {
+      state.deliveryLocation = action.payload;
     },
     findSelectedCategory: (state, action) => {
       state.selectedCategoryData = findCategoryDataByNameandGender(
