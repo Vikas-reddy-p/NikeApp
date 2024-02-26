@@ -7,6 +7,7 @@ import {
   Text,
   ScrollView,
   Pressable,
+  TextInput,
 } from "react-native";
 import products from "../data/products";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +16,7 @@ import MainButton from "../components/MainButton";
 import { useEffect, useState } from "react";
 import Dropdown from "../components/Dropdown";
 import { FontAwesome } from "@expo/vector-icons";
+import * as Location from "expo-location";
 
 const ProductDetailsScreen = ({ navigation }) => {
   const { width } = useWindowDimensions(); // to get the screen dimensions
@@ -35,6 +37,53 @@ const ProductDetailsScreen = ({ navigation }) => {
     });
   }, [selectedProduct]);
   //const product = products[0];
+
+  ///////////////////
+  //const [location, setLocation] = useState(null);
+  const [address, setAddress] = useState(null);
+  const [deliveryLocation, setDeliveryLocation] = useState(null);
+  useEffect(() => {
+    (async () => {
+      try {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          console.warn("Permission to access location was denied");
+          return;
+        }
+
+        let currlocation = await Location.getCurrentPositionAsync({});
+        //setLocation(currlocation);
+        reverseGeoCode(currlocation.coords);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, []);
+
+  const geocode = async () => {
+    try {
+      const geocodedLocation = await Location.geocodeAsync(address);
+      reverseGeoCode(geocodedLocation[0]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const reverseGeoCode = async (address) => {
+    try {
+      if (address) {
+        const reverseGeoCodedAddress = await Location.reverseGeocodeAsync({
+          longitude: address.longitude,
+          latitude: address.latitude,
+        });
+        setDeliveryLocation(reverseGeoCodedAddress[0]);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  ///////////////////
 
   const addToCart = () => {
     //setAddToCartFlag(true);
@@ -85,9 +134,9 @@ const ProductDetailsScreen = ({ navigation }) => {
             style={[styles.flexRowView, { justifyContent: "space-between" }]}
           >
             <Text style={styles.title}>{selectedProduct.name}</Text>
-            <Pressable style={{ marginTop: 22 }}>
+            {/* <Pressable style={{ marginTop: 22 }}>
               <FontAwesome name="heart-o" size={24} color="black" />
-            </Pressable>
+            </Pressable> */}
           </View>
 
           {/* Price */}
@@ -110,6 +159,7 @@ const ProductDetailsScreen = ({ navigation }) => {
               Please select a size.
             </Text>
           ) : null}
+
           <View style={styles.flexRowView}>
             {selectedProduct.sizes.map((size) => {
               return (
@@ -126,6 +176,36 @@ const ProductDetailsScreen = ({ navigation }) => {
               );
             })}
           </View>
+
+          {/*  location plugin start*/}
+          <View style={{ marginTop: 15 }}>
+            <View style={[styles.flexRowView, { marginBottom: 15 }]}>
+              <TextInput
+                style={styles.postalCodeInput}
+                placeholder="Enter Postal Code"
+                value={address}
+                onChangeText={setAddress}
+              />
+              <Pressable style={styles.postalCodeCheck} onPress={geocode}>
+                <Text style={{ fontWeight: "500" }}>Check</Text>
+              </Pressable>
+            </View>
+
+            {deliveryLocation ? (
+              <Text
+                style={[
+                  styles.price,
+                  { letterSpacing: 0, fontWeight: "500", paddingLeft: 5 },
+                ]}
+              >
+                Deliver to {deliveryLocation.city} -{" "}
+                {deliveryLocation.postalCode}
+              </Text>
+            ) : (
+              ""
+            )}
+          </View>
+          {/* location plugin end */}
 
           {/* Description */}
           <Text style={styles.description}>{selectedProduct.description}</Text>
@@ -200,6 +280,23 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     backgroundColor: "rgb(214 219 221))",
     borderColor: "#222",
+  },
+  postalCodeInput: {
+    width: 200,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: "#aaa",
+    borderRadius: 10,
+  },
+  postalCodeCheck: {
+    width: 100,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 20,
+    borderWidth: 1,
+    borderColor: "#aaa",
+    borderRadius: 10,
   },
 });
 
