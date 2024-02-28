@@ -28,7 +28,7 @@ const Categorieslist = ({ nestedList, scrollTo, onSelect }) => {
   const Subsections = ({ category }) => {
     return (
       <View style={{ paddingVertical: 10 }}>
-        {category.topics.map((topic, index, array) => (
+        {category?.topics?.map((topic, index, array) => (
           <Pressable
             key={topic.name}
             style={styles.subCategoriesView}
@@ -53,7 +53,7 @@ const Categorieslist = ({ nestedList, scrollTo, onSelect }) => {
     );
   };
 
-  return nestedList.map((category) => (
+  return nestedList?.map((category) => (
     <View key={category.name}>
       <ImageBackground
         style={{ marginVertical: 2.5 }}

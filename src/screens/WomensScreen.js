@@ -40,14 +40,14 @@ const WomensScreen = ({ navigation }) => {
     });
   };
 
-  return data ? (
+  return (
     <ScrollView style={styles.container} ref={scrollViewRef}>
       <View style={styles.childContainer}>
         <Text style={styles.sectionHeader}>This Week's Highlights</Text>
         <FlatList
           showsHorizontalScrollIndicator={false}
           horizontal
-          data={data.women.highlights}
+          data={data?.women?.highlights}
           renderItem={({ item }) => (
             <TouchableOpacity
               onPress={() => navigateToDynamicScreen(item.name)}
@@ -74,7 +74,7 @@ const WomensScreen = ({ navigation }) => {
         <FlatList
           showsHorizontalScrollIndicator={false}
           horizontal
-          data={data.women.shopByColour}
+          data={data?.women?.shopByColour}
           renderItem={({ item }) => (
             <TouchableOpacity
               onPress={() => navigateToDynamicScreen(item.name)}
@@ -97,13 +97,11 @@ const WomensScreen = ({ navigation }) => {
         />
       </View>
       <Categorieslist
-        nestedList={data.women.shopAll}
+        nestedList={data?.women?.shopAll}
         scrollTo={scrollTo}
         onSelect={navigateToDynamicScreen}
       />
     </ScrollView>
-  ) : (
-    <></>
   );
 };
 

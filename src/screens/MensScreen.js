@@ -21,7 +21,7 @@ const MensScreen = ({ navigation }) => {
   //const [mensData, setMensData] = useState(null);
   const data = useSelector((state) => state.masterProducts.allProducts);
   // setMensData(data["men"]);
-  const mensData = data["men"];
+  const mensData = data?.["men"];
   // useEffect(() => {
   //   const data = useSelector((state) => state.masterProducts.allProducts);
   //   setMensData(data["men"]);
@@ -86,7 +86,7 @@ const MensScreen = ({ navigation }) => {
     });
   };
   // return <></>;
-  return mensData ? (
+  return (
     <ScrollView style={styles.container} ref={scrollViewRef}>
       <View>
         <View style={styles.childContainer}>
@@ -153,8 +153,6 @@ const MensScreen = ({ navigation }) => {
         />
       </View>
     </ScrollView>
-  ) : (
-    <></>
   );
 };
 

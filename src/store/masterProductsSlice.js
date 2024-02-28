@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import masterdata from "../data/masterdata";
 
 const initialState = {
-  allProducts: {},
+  allProducts: null,
   deliveryLocation: null,
   selectedCategoryData: {},
 };
