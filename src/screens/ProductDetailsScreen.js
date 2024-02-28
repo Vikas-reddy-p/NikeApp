@@ -18,6 +18,7 @@ import Dropdown from "../components/Dropdown";
 import { FontAwesome } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import { masterProductsSlice } from "../store/masterProductsSlice";
+import Toast from "react-native-toast-message";
 
 const ProductDetailsScreen = ({ navigation }) => {
   const { width } = useWindowDimensions(); // to get the screen dimensions
@@ -100,6 +101,12 @@ const ProductDetailsScreen = ({ navigation }) => {
     if (selectedSize) {
       let product = { ...selectedProduct, size: selectedSize };
       dispatch(cartSlice.actions.addCartItem({ product }));
+      Toast.show({
+        type: "success",
+        text1: "Added to Bag",
+        position: "top",
+        // topOffset: 100,
+      });
     }
   };
 

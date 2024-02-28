@@ -17,7 +17,16 @@ import { masterProductsSlice } from "../store/masterProductsSlice";
 import * as Location from "expo-location";
 
 const MensScreen = ({ navigation }) => {
+  //let mensData;
+  //const [mensData, setMensData] = useState(null);
   const data = useSelector((state) => state.masterProducts.allProducts);
+  // setMensData(data["men"]);
+  const mensData = data["men"];
+  // useEffect(() => {
+  //   const data = useSelector((state) => state.masterProducts.allProducts);
+  //   setMensData(data["men"]);
+  // }, []);
+
   const scrollViewRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -76,69 +85,76 @@ const MensScreen = ({ navigation }) => {
       selectedGender: "men",
     });
   };
-
-  return (
+  // return <></>;
+  return mensData ? (
     <ScrollView style={styles.container} ref={scrollViewRef}>
-      <View style={styles.childContainer}>
-        <Text style={styles.sectionHeader}>This Week's Highlights</Text>
-        <FlatList
-          showsHorizontalScrollIndicator={false}
-          horizontal
-          data={data.men.highlights}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() => navigateToDynamicScreen(item.name)}
-              style={styles.highlightsTouchable}
-            >
-              <Image
-                source={{
-                  uri: item.image,
-                }}
-                style={styles.highlightsImage}
-              />
-              <View style={styles.titlesView}>
-                {item.subTitle ? (
-                  <Text style={styles.subTitle}>{item.subTitle}</Text>
-                ) : null}
-                <Text style={styles.title}>{item.name}</Text>
-              </View>
-            </TouchableOpacity>
-          )}
+      <View>
+        <View style={styles.childContainer}>
+          <Text style={styles.sectionHeader}>This Week's Highlights</Text>
+          <FlatList
+            showsHorizontalScrollIndicator={false}
+            horizontal
+            //data={data.men.highlights}
+            data={mensData?.["highlights"]}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() => navigateToDynamicScreen(item.name)}
+                style={styles.highlightsTouchable}
+              >
+                <Image
+                  source={{
+                    uri: item.image,
+                  }}
+                  style={styles.highlightsImage}
+                />
+                <View style={styles.titlesView}>
+                  {item.subTitle ? (
+                    <Text style={styles.subTitle}>{item.subTitle}</Text>
+                  ) : null}
+                  <Text style={styles.title}>{item.name}</Text>
+                </View>
+              </TouchableOpacity>
+            )}
+          />
+        </View>
+        <View style={styles.childContainer}>
+          <Text style={styles.sectionHeader}>Shop by Colour</Text>
+          <FlatList
+            showsHorizontalScrollIndicator={false}
+            horizontal
+            // data={data.men.shopByColour}
+            data={mensData?.["shopByColour"]}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() => navigateToDynamicScreen(item.name)}
+                style={styles.shopColoursTouchable}
+              >
+                <Image
+                  source={{
+                    uri: item.image,
+                  }}
+                  style={styles.shopColoursImage}
+                />
+                <View style={styles.titlesView}>
+                  {item.subTitle ? (
+                    <Text style={styles.subTitle}>{item.subTitle}</Text>
+                  ) : null}
+                  <Text style={styles.title}>{item.name}</Text>
+                </View>
+              </TouchableOpacity>
+            )}
+          />
+        </View>
+        <Categorieslist
+          //nestedList={data.men.shopAll}
+          nestedList={mensData?.["shopAll"]}
+          scrollTo={scrollTo}
+          onSelect={navigateToDynamicScreen}
         />
       </View>
-      <View style={styles.childContainer}>
-        <Text style={styles.sectionHeader}>Shop by Colour</Text>
-        <FlatList
-          showsHorizontalScrollIndicator={false}
-          horizontal
-          data={data.men.shopByColour}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() => navigateToDynamicScreen(item.name)}
-              style={styles.shopColoursTouchable}
-            >
-              <Image
-                source={{
-                  uri: item.image,
-                }}
-                style={styles.shopColoursImage}
-              />
-              <View style={styles.titlesView}>
-                {item.subTitle ? (
-                  <Text style={styles.subTitle}>{item.subTitle}</Text>
-                ) : null}
-                <Text style={styles.title}>{item.name}</Text>
-              </View>
-            </TouchableOpacity>
-          )}
-        />
-      </View>
-      <Categorieslist
-        nestedList={data.men.shopAll}
-        scrollTo={scrollTo}
-        onSelect={navigateToDynamicScreen}
-      />
     </ScrollView>
+  ) : (
+    <></>
   );
 };
 

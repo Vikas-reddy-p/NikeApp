@@ -40,7 +40,7 @@ const WomensScreen = ({ navigation }) => {
     });
   };
 
-  return (
+  return data ? (
     <ScrollView style={styles.container} ref={scrollViewRef}>
       <View style={styles.childContainer}>
         <Text style={styles.sectionHeader}>This Week's Highlights</Text>
@@ -102,6 +102,8 @@ const WomensScreen = ({ navigation }) => {
         onSelect={navigateToDynamicScreen}
       />
     </ScrollView>
+  ) : (
+    <></>
   );
 };
 
