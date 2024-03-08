@@ -4,7 +4,7 @@
     "slug": "NikeApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/nikeapp_logo.png",
+    "icon": "./assets/nikeadaptive-icon.png",
     "userInterfaceStyle": "light",
     //"jsEngine": "hermes",
     "splash": {
@@ -18,7 +18,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/nikeadaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.vikasreddy08.NikeApp"
