@@ -1,4 +1,11 @@
-import { FlatList, StyleSheet, Text, View, Pressable } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  Button,
+} from "react-native";
 import cart from "../data/cart";
 import CartListItem from "../components/CartListItem";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,13 +19,52 @@ import {
 import MainButton from "../components/MainButton";
 import { Foundation } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
+import { useState } from "react";
+import DatePicker from "react-native-date-picker";
+import { AntDesign } from "@expo/vector-icons";
 
 const ShoppingCartTotals = () => {
   const subTotal = useSelector(selectSubTotal);
   const deliveryFee = useSelector(selectDeliveryPrice);
   const total = useSelector(selectTotal);
+  let minDate = new Date();
+  minDate.setDate(minDate.getDate() + 1);
+
+  const [date, setDate] = useState(minDate);
+  const [open, setOpen] = useState(false);
+
   return (
     <View style={styles.totalsContainer}>
+      <View
+        style={[
+          styles.row,
+          { paddingBottom: 15, borderBottomWidth: 1, borderColor: "gainsboro" },
+        ]}
+      >
+        <View style={{ flexDirection: "row" }}>
+          <Text style={styles.text}>Select delivery date</Text>
+          <Pressable onPress={() => setOpen(true)} style={{ marginLeft: 5 }}>
+            <AntDesign name="calendar" size={20} color="black" />
+          </Pressable>
+          <DatePicker
+            modal
+            open={open}
+            date={date}
+            mode="date"
+            minimumDate={minDate}
+            onConfirm={(date) => {
+              setOpen(false);
+              setDate(date);
+            }}
+            onCancel={() => {
+              setOpen(false);
+            }}
+          />
+        </View>
+        <View>
+          <Text style={styles.textBold}>{date.toDateString()}</Text>
+        </View>
+      </View>
       <View style={styles.row}>
         <Text style={styles.text}>Subtotal</Text>
         <Text style={styles.text}>₹{subTotal}</Text>

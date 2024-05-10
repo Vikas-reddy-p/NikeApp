@@ -34,6 +34,8 @@ import { productsSlice } from "./store/productsSlice";
 import { masterProductsSlice } from "./store/masterProductsSlice";
 import axios from "axios";
 import { useEffect } from "react";
+import masterdata from "./data/masterdata";
+import products from "./data/products";
 
 const makeApiCall = async (url) => {
   try {
@@ -70,10 +72,12 @@ const Navigation = () => {
     const masterData = makeApiCall(MASTER_DATA_API_URL);
     const productsData = makeApiCall(PRODUCTS_API_URL);
     masterData.then((data) => {
-      dispatch(masterProductsSlice.actions.setMasterData(data));
+      dispatch(
+        masterProductsSlice.actions.setMasterData(data ? data : masterdata)
+      );
     });
     productsData.then((data) => {
-      dispatch(productsSlice.actions.setProductsState(data));
+      dispatch(productsSlice.actions.setProductsState(data ? data : products));
     });
   }, []);
 

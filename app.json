@@ -30,6 +30,14 @@
       "eas": {
         "projectId": "119b9c27-02b7-48b2-bba2-2b4bfc677619"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "isAndroidBackgroundLocationEnabled": true
+        }
+      ]
+    ]
   }
 }
